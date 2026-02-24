@@ -158,25 +158,25 @@ fn run_tui(
             last_live_refresh = Instant::now();
         }
 
-        if event::poll(Duration::from_millis(200))? {
-            if let Event::Key(key) = event::read()? {
-                if key.kind != KeyEventKind::Press {
-                    continue;
+        if event::poll(Duration::from_millis(200))?
+            && let Event::Key(key) = event::read()?
+        {
+            if key.kind != KeyEventKind::Press {
+                continue;
+            }
+            match key.code {
+                KeyCode::Char('q') | KeyCode::Esc => break,
+                KeyCode::Right | KeyCode::Tab => {
+                    app.tab = (app.tab + 1) % 5;
+                    app.refresh_history(pool, &rt);
                 }
-                match key.code {
-                    KeyCode::Char('q') | KeyCode::Esc => break,
-                    KeyCode::Right | KeyCode::Tab => {
-                        app.tab = (app.tab + 1) % 5;
-                        app.refresh_history(pool, &rt);
-                    }
-                    KeyCode::Left => {
-                        app.tab = app.tab.checked_sub(1).unwrap_or(4);
-                        app.refresh_history(pool, &rt);
-                    }
-                    KeyCode::Down => {}
-                    KeyCode::Up => {}
-                    _ => {}
+                KeyCode::Left => {
+                    app.tab = app.tab.checked_sub(1).unwrap_or(4);
+                    app.refresh_history(pool, &rt);
                 }
+                KeyCode::Down => {}
+                KeyCode::Up => {}
+                _ => {}
             }
         }
     }
@@ -302,7 +302,7 @@ fn render_live(frame: &mut Frame, area: Rect, app: &App) {
     }
 
     let table_y = y;
-    let table_height = (inner.y + inner.height).saturating_sub(table_y) as u16;
+    let table_height = (inner.y + inner.height).saturating_sub(table_y);
     let table_area = Rect {
         x: inner.x,
         y: table_y,
