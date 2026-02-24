@@ -1,7 +1,6 @@
-use sqlx::{sqlite::SqlitePool, FromRow};
+use sqlx::{FromRow, sqlite::SqlitePool};
 
-
-pub async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error>{
+pub async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
     sqlx::query(
         "CREATE TABLE IF NOT EXISTS traffic (
             id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -9,23 +8,25 @@ pub async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error>{
             rx_bytes INTEGER NOT NULL,
             tx_bytes INTEGER NOT NULL,
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-        )"
+        )",
     )
     .execute(pool)
     .await?;
     Ok(())
 }
 
-
-pub async fn save_delta(pool: &SqlitePool, interface: &str, rx_delta: &i64, tx_delta: &i64) -> Result<(), sqlx::Error> {
-    sqlx::query(
-        "INSERT INTO traffic (interface, rx_bytes, tx_bytes) VALUES (?, ?, ?)",
-    )
-    .bind(interface)
-    .bind(rx_delta)
-    .bind(tx_delta)
-    .execute(pool)
-    .await?;
+pub async fn save_delta(
+    pool: &SqlitePool,
+    interface: &str,
+    rx_delta: &i64,
+    tx_delta: &i64,
+) -> Result<(), sqlx::Error> {
+    sqlx::query("INSERT INTO traffic (interface, rx_bytes, tx_bytes) VALUES (?, ?, ?)")
+        .bind(interface)
+        .bind(rx_delta)
+        .bind(tx_delta)
+        .execute(pool)
+        .await?;
 
     Ok(())
 }
@@ -39,7 +40,7 @@ struct AggRow {
 
 #[derive(Debug, Clone)]
 pub struct PeriodRow {
-    pub period: String, 
+    pub period: String,
     pub rx_mib: f64,
     pub tx_mib: f64,
     pub total_mib: f64,
@@ -50,10 +51,12 @@ const MIB: f64 = 1024.0 * 1024.0;
 fn agg_to_period(r: AggRow) -> PeriodRow {
     let rx_mib = r.rx as f64 / MIB;
     let tx_mib: f64 = r.tx as f64 / MIB;
-    PeriodRow { 
+    PeriodRow {
         period: r.period,
-        rx_mib, tx_mib, 
-        total_mib: rx_mib + tx_mib }
+        rx_mib,
+        tx_mib,
+        total_mib: rx_mib + tx_mib,
+    }
 }
 
 pub async fn usage_by_hour(pool: &SqlitePool, limit: u32) -> Result<Vec<PeriodRow>, sqlx::Error> {
@@ -77,7 +80,7 @@ pub async fn usage_by_hour(pool: &SqlitePool, limit: u32) -> Result<Vec<PeriodRo
     let out = rows.into_iter().map(agg_to_period).collect();
 
     Ok(out)
-} 
+}
 
 pub async fn usage_by_day(pool: &SqlitePool, limit: u32) -> Result<Vec<PeriodRow>, sqlx::Error> {
     let rows = sqlx::query_as(
@@ -111,7 +114,7 @@ pub async fn usage_by_week(pool: &SqlitePool, limit: u32) -> Result<Vec<PeriodRo
         GROUP BY period
         ORDER by period DESC
         LIMIT ?
-        "#
+        "#,
     )
     .bind(limit as i64)
     .fetch_all(pool)

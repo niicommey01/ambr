@@ -21,8 +21,8 @@ mod theme {
     pub const BORDER: Color = Color::Rgb(0x30, 0x4d, 0x6d);
     pub const BORDER_FOCUS: Color = Color::Rgb(0x00, 0xbf, 0xd8);
     pub const TITLE: Color = Color::Rgb(0x00, 0xbf, 0xd8);
-    pub const RX: Color = Color::Rgb(0x00, 0xbf, 0xd8);   // download / in
-    pub const TX: Color = Color::Rgb(0x00, 0xe6, 0x76);   // upload / out
+    pub const RX: Color = Color::Rgb(0x00, 0xbf, 0xd8); // download / in
+    pub const TX: Color = Color::Rgb(0x00, 0xe6, 0x76); // upload / out
     pub const TOTAL: Color = Color::Rgb(0xff, 0xb7, 0x2b); // amber
     pub const HEADER: Color = Color::Rgb(0xe6, 0xed, 0xf3);
     pub const ROW_ALT: Color = Color::Rgb(0x16, 0x1b, 0x22);
@@ -62,7 +62,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     .await;
 
     result.expect("TUI thread panicked")?;
-    
 
     Ok(())
 }
@@ -128,14 +127,17 @@ impl App {
     }
 }
 
-fn run_tui(pool: &sqlx::SqlitePool, rt: tokio::runtime::Handle) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+fn run_tui(
+    pool: &sqlx::SqlitePool,
+    rt: tokio::runtime::Handle,
+) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     let mut stdout = io::stdout();
     execute!(stdout, EnterAlternateScreen)?;
     enable_raw_mode()?;
     let mut terminal = Terminal::new(ratatui::backend::CrosstermBackend::new(stdout))?;
 
-    const LIVE_TAB_REFRESH: Duration = Duration::from_secs(1);  // real-time when on Live tab
-    const LIVE_BACKGROUND_REFRESH: Duration = Duration::from_secs(2);  // when on other tabs
+    const LIVE_TAB_REFRESH: Duration = Duration::from_secs(1); // real-time when on Live tab
+    const LIVE_BACKGROUND_REFRESH: Duration = Duration::from_secs(2); // when on other tabs
 
     let mut app = App::new();
     app.refresh_history(pool, &rt);
@@ -183,8 +185,6 @@ fn run_tui(pool: &sqlx::SqlitePool, rt: tokio::runtime::Handle) -> Result<(), Bo
     execute!(terminal.backend_mut(), LeaveAlternateScreen)?;
     terminal.show_cursor()?;
     Ok(())
-
-
 }
 
 fn ui(frame: &mut Frame, app: &App) {
@@ -196,18 +196,31 @@ fn ui(frame: &mut Frame, app: &App) {
 
     let chunks = Layout::default()
         .direction(Direction::Vertical)
-        .constraints([Constraint::Length(3), Constraint::Min(0), Constraint::Length(1)])
+        .constraints([
+            Constraint::Length(3),
+            Constraint::Min(0),
+            Constraint::Length(1),
+        ])
         .split(frame.area());
 
     let titles = [" Live ", " Hourly ", " Daily ", " Weekly ", " Monthly "];
     let tab_block = Block::default()
         .borders(Borders::ALL)
         .border_style(Style::default().fg(theme::BORDER))
-        .title(Span::styled(" ambr ", Style::default().fg(theme::TITLE).add_modifier(Modifier::BOLD)));
+        .title(Span::styled(
+            " ambr ",
+            Style::default()
+                .fg(theme::TITLE)
+                .add_modifier(Modifier::BOLD),
+        ));
     let tabs = Tabs::new(titles)
         .block(tab_block)
         .style(Style::default().fg(theme::HINT))
-        .highlight_style(Style::default().fg(theme::BORDER_FOCUS).add_modifier(Modifier::BOLD))
+        .highlight_style(
+            Style::default()
+                .fg(theme::BORDER_FOCUS)
+                .add_modifier(Modifier::BOLD),
+        )
         .select(app.tab);
     frame.render_widget(tabs, chunks[0]);
 
@@ -241,7 +254,10 @@ fn render_live(frame: &mut Frame, area: Rect, app: &App) {
             Span::styled("↑ ", Style::default().fg(theme::TX)),
             Span::styled(format!("{:.2} MiB  ", tx1), Style::default().fg(theme::TX)),
             Span::styled("◆ ", Style::default().fg(theme::TOTAL)),
-            Span::styled(format!("{:.2} MiB", total1), Style::default().fg(theme::TOTAL)),
+            Span::styled(
+                format!("{:.2} MiB", total1),
+                Style::default().fg(theme::TOTAL),
+            ),
         ]),
         Line::from(""),
         Line::from(vec![
@@ -251,7 +267,10 @@ fn render_live(frame: &mut Frame, area: Rect, app: &App) {
             Span::styled("↑ ", Style::default().fg(theme::TX)),
             Span::styled(format!("{:.2} MiB  ", tx5), Style::default().fg(theme::TX)),
             Span::styled("◆ ", Style::default().fg(theme::TOTAL)),
-            Span::styled(format!("{:.2} MiB", total5), Style::default().fg(theme::TOTAL)),
+            Span::styled(
+                format!("{:.2} MiB", total5),
+                Style::default().fg(theme::TOTAL),
+            ),
         ]),
         Line::from(""),
     ];
@@ -259,7 +278,12 @@ fn render_live(frame: &mut Frame, area: Rect, app: &App) {
     let block = Block::default()
         .borders(Borders::ALL)
         .border_style(Style::default().fg(theme::BORDER))
-        .title(Span::styled(" Live traffic ", Style::default().fg(theme::TITLE).add_modifier(Modifier::BOLD)));
+        .title(Span::styled(
+            " Live traffic ",
+            Style::default()
+                .fg(theme::TITLE)
+                .add_modifier(Modifier::BOLD),
+        ));
     let inner = block.inner(area);
     frame.render_widget(block, area);
 
@@ -267,7 +291,12 @@ fn render_live(frame: &mut Frame, area: Rect, app: &App) {
     for line in &lines {
         frame.render_widget(
             Paragraph::new(line.clone()).style(Style::default().bg(theme::BG)),
-            Rect { x: inner.x, y, width: inner.width, height: 1 },
+            Rect {
+                x: inner.x,
+                y,
+                width: inner.width,
+                height: 1,
+            },
         );
         y += 1;
     }
@@ -281,24 +310,48 @@ fn render_live(frame: &mut Frame, area: Rect, app: &App) {
         height: table_height,
     };
     if table_area.height >= 2 {
-        let header_style = Style::default().fg(theme::HEADER).add_modifier(Modifier::BOLD);
+        let header_style = Style::default()
+            .fg(theme::HEADER)
+            .add_modifier(Modifier::BOLD);
         let header = Row::new(vec![
             Cell::from(Span::styled("Interface", header_style)),
-            Cell::from(Span::styled("↓ Rx (MiB)", Style::default().fg(theme::RX).add_modifier(Modifier::BOLD))),
-            Cell::from(Span::styled("↑ Tx (MiB)", Style::default().fg(theme::TX).add_modifier(Modifier::BOLD))),
-            Cell::from(Span::styled("Total (MiB)", Style::default().fg(theme::TOTAL).add_modifier(Modifier::BOLD))),
+            Cell::from(Span::styled(
+                "↓ Rx (MiB)",
+                Style::default().fg(theme::RX).add_modifier(Modifier::BOLD),
+            )),
+            Cell::from(Span::styled(
+                "↑ Tx (MiB)",
+                Style::default().fg(theme::TX).add_modifier(Modifier::BOLD),
+            )),
+            Cell::from(Span::styled(
+                "Total (MiB)",
+                Style::default()
+                    .fg(theme::TOTAL)
+                    .add_modifier(Modifier::BOLD),
+            )),
         ]);
         let table_rows: Vec<Row> = app
             .live_by_interface
             .iter()
             .enumerate()
             .map(|(i, r)| {
-                let bg = if i % 2 == 1 { theme::ROW_ALT } else { theme::BG };
+                let bg = if i % 2 == 1 {
+                    theme::ROW_ALT
+                } else {
+                    theme::BG
+                };
                 Row::new(vec![
-                    Cell::from(Span::styled(r.interface.clone(), Style::default().fg(theme::HEADER))).style(Style::default().bg(bg)),
-                    Cell::from(format!("{:.2}", r.rx_mib)).style(Style::default().fg(theme::RX).bg(bg)),
-                    Cell::from(format!("{:.2}", r.tx_mib)).style(Style::default().fg(theme::TX).bg(bg)),
-                    Cell::from(format!("{:.2}", r.total_mib)).style(Style::default().fg(theme::TOTAL).bg(bg)),
+                    Cell::from(Span::styled(
+                        r.interface.clone(),
+                        Style::default().fg(theme::HEADER),
+                    ))
+                    .style(Style::default().bg(bg)),
+                    Cell::from(format!("{:.2}", r.rx_mib))
+                        .style(Style::default().fg(theme::RX).bg(bg)),
+                    Cell::from(format!("{:.2}", r.tx_mib))
+                        .style(Style::default().fg(theme::TX).bg(bg)),
+                    Cell::from(format!("{:.2}", r.total_mib))
+                        .style(Style::default().fg(theme::TOTAL).bg(bg)),
                 ])
             })
             .collect();
@@ -311,7 +364,10 @@ fn render_live(frame: &mut Frame, area: Rect, app: &App) {
         let table_block = Block::default()
             .borders(Borders::ALL)
             .border_style(Style::default().fg(theme::BORDER))
-            .title(Span::styled(" By interface (last 1 min) ", Style::default().fg(theme::TITLE)));
+            .title(Span::styled(
+                " By interface (last 1 min) ",
+                Style::default().fg(theme::TITLE),
+            ));
         let table = Table::new(table_rows, widths)
             .header(header)
             .block(table_block);
@@ -320,23 +376,45 @@ fn render_live(frame: &mut Frame, area: Rect, app: &App) {
 }
 
 fn render_table(frame: &mut Frame, area: Rect, rows: &[db::PeriodRow], title: &str) {
-    let header_style = Style::default().fg(theme::HEADER).add_modifier(Modifier::BOLD);
+    let header_style = Style::default()
+        .fg(theme::HEADER)
+        .add_modifier(Modifier::BOLD);
     let header = Row::new(vec![
         Cell::from(Span::styled("Period", header_style)),
-        Cell::from(Span::styled("↓ Rx (MiB)", Style::default().fg(theme::RX).add_modifier(Modifier::BOLD))),
-        Cell::from(Span::styled("↑ Tx (MiB)", Style::default().fg(theme::TX).add_modifier(Modifier::BOLD))),
-        Cell::from(Span::styled("Total (MiB)", Style::default().fg(theme::TOTAL).add_modifier(Modifier::BOLD))),
+        Cell::from(Span::styled(
+            "↓ Rx (MiB)",
+            Style::default().fg(theme::RX).add_modifier(Modifier::BOLD),
+        )),
+        Cell::from(Span::styled(
+            "↑ Tx (MiB)",
+            Style::default().fg(theme::TX).add_modifier(Modifier::BOLD),
+        )),
+        Cell::from(Span::styled(
+            "Total (MiB)",
+            Style::default()
+                .fg(theme::TOTAL)
+                .add_modifier(Modifier::BOLD),
+        )),
     ]);
     let table_rows: Vec<Row> = rows
         .iter()
         .enumerate()
         .map(|(i, r)| {
-            let bg = if i % 2 == 1 { theme::ROW_ALT } else { theme::BG };
+            let bg = if i % 2 == 1 {
+                theme::ROW_ALT
+            } else {
+                theme::BG
+            };
             Row::new(vec![
-                Cell::from(Span::styled(r.period.clone(), Style::default().fg(theme::HEADER))).style(Style::default().bg(bg)),
+                Cell::from(Span::styled(
+                    r.period.clone(),
+                    Style::default().fg(theme::HEADER),
+                ))
+                .style(Style::default().bg(bg)),
                 Cell::from(format!("{:.2}", r.rx_mib)).style(Style::default().fg(theme::RX).bg(bg)),
                 Cell::from(format!("{:.2}", r.tx_mib)).style(Style::default().fg(theme::TX).bg(bg)),
-                Cell::from(format!("{:.2}", r.total_mib)).style(Style::default().fg(theme::TOTAL).bg(bg)),
+                Cell::from(format!("{:.2}", r.total_mib))
+                    .style(Style::default().fg(theme::TOTAL).bg(bg)),
             ])
         })
         .collect();
@@ -349,9 +427,12 @@ fn render_table(frame: &mut Frame, area: Rect, rows: &[db::PeriodRow], title: &s
     let block = Block::default()
         .borders(Borders::ALL)
         .border_style(Style::default().fg(theme::BORDER))
-        .title(Span::styled(title, Style::default().fg(theme::TITLE).add_modifier(Modifier::BOLD)));
-    let table = Table::new(table_rows, widths)
-        .header(header)
-        .block(block);
+        .title(Span::styled(
+            title,
+            Style::default()
+                .fg(theme::TITLE)
+                .add_modifier(Modifier::BOLD),
+        ));
+    let table = Table::new(table_rows, widths).header(header).block(block);
     frame.render_widget(table, area);
 }

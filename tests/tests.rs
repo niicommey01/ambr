@@ -51,7 +51,9 @@ async fn test_recent_by_interface() {
 #[tokio::test]
 async fn test_usage_by_day() {
     let pool = test_pool().await;
-    db::save_delta(&pool, "eth0", &100_000, &50_000).await.unwrap();
+    db::save_delta(&pool, "eth0", &100_000, &50_000)
+        .await
+        .unwrap();
     let rows = db::usage_by_day(&pool, 10).await.unwrap();
     assert!(!rows.is_empty());
     assert!((rows[0].total_mib - (rows[0].rx_mib + rows[0].tx_mib)).abs() < 1e-6);
