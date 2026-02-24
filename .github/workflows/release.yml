@@ -171,10 +171,10 @@ jobs:
           name: Release ${{ github.ref_name }}
           generate_release_notes: true
           files: |
-            release-artifacts/ambr-linux_amd64/ambr-linux_amd64.tar.gz
-            release-artifacts/ambr-linux_arm64/ambr-linux_arm64.tar.gz
-            release-artifacts/ambr-windows_amd64/ambr-windows_amd64.zip
-            release-artifacts/ambr-darwin_amd64/ambr-darwin_amd64.tar.gz
-            release-artifacts/ambr-darwin_arm64/ambr-darwin_arm64.tar.gz
+            release-artifacts/ambr-linux_amd64.tar.gz
+            release-artifacts/ambr-linux_arm64.tar.gz
+            release-artifacts/ambr-windows_amd64.zip
+            release-artifacts/ambr-darwin_amd64.tar.gz
+            release-artifacts/ambr-darwin_arm64.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
