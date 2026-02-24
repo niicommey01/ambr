@@ -59,7 +59,7 @@ jobs:
           key: release-linux-arm64
 
       - name: Add Rust target for arm64
-        run: rustup target add aarch64-unknown-linux-gnu
+        run: $HOME/.cargo/bin/rustup target add aarch64-unknown-linux-gnu --toolchain stable
 
       - name: Build
         run: cargo build --release --target aarch64-unknown-linux-gnu
@@ -99,7 +99,7 @@ jobs:
           key: release-windows
 
       - name: Add Rust target for Windows
-        run: rustup target add x86_64-pc-windows-gnu
+        run: $HOME/.cargo/bin/rustup target add x86_64-pc-windows-gnu --toolchain stable
 
       - name: Build
         run: cargo build --release --target x86_64-pc-windows-gnu
@@ -141,7 +141,7 @@ jobs:
           key: release-darwin-${{ matrix.target }}
 
       - name: Add Rust target for macOS
-        run: rustup target add ${{ matrix.target }}
+        run: $HOME/.cargo/bin/rustup target add ${{ matrix.target }} --toolchain stable
 
       - name: Build
         run: cargo build --release --target ${{ matrix.target }}
