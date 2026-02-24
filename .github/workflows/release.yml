@@ -34,7 +34,7 @@ jobs:
           tar -czvf dist/ambr-linux_amd64.tar.gz -C dist ambr-linux_amd64
 
       - name: Upload artifact
-        uses: actions/upload-artifact@4
+        uses: actions/upload-artifact@v4
         with:
           name: ambr-linux_amd64
           path: dist/ambr-linux_amd64.tar.gz
@@ -67,7 +67,7 @@ jobs:
           tar -czvf dist/ambr-linux_arm64.tar.gz -C dist ambr-linux_arm64
 
       - name: Upload artifact
-        uses: actions/upload-artifact@4
+        uses: actions/upload-artifact@v4
         with:
           name: ambr-linux_arm64
           path: dist/ambr-linux_arm64.tar.gz
@@ -102,7 +102,7 @@ jobs:
           cd dist && zip -r ambr-windows_amd64.zip ambr-windows_amd64
 
       - name: Upload artifact
-        uses: actions/upload-artifact@4
+        uses: actions/upload-artifact@v4
         with:
           name: ambr-windows_amd64
           path: dist/ambr-windows_amd64.zip
@@ -139,7 +139,7 @@ jobs:
           tar -czvf dist/ambr-${{ matrix.suffix }}.tar.gz -C dist ambr-${{ matrix.suffix }}
 
       - name: Upload artifact
-        uses: actions/upload-artifact@4
+        uses: actions/upload-artifact@v4
         with:
           name: ambr-${{ matrix.suffix }}
           path: dist/ambr-${{ matrix.suffix }}.tar.gz
@@ -150,7 +150,7 @@ jobs:
     needs: [build-linux-amd64, build-linux-arm64, build-windows, build-darwin]
     steps:
       - name: Download all artifacts
-        uses: actions/download-artifact@4
+        uses: actions/download-artifact@v4
         with:
           path: release-artifacts
           merge-multiple: true
