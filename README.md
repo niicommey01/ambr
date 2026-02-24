@@ -2,6 +2,16 @@
 
 A **terminal user interface (TUI)** for monitoring network traffic. It records per-interface usage in the background and shows live and historical data (hourly, daily, weekly, monthly) in MiB, with a networking-style color scheme.
 
+### Screenshots
+
+| Live | Hourly | Daily |
+|------|--------|-------|
+| ![Live tab](.github/assets/live_tab_screenshot.png) | ![Hourly tab](.github/assets/hourly_screenshot.png) | ![Daily tab](.github/assets/daily_screenshot.png) |
+
+| Weekly | Monthly |
+|--------|---------|
+| ![Weekly tab](.github/assets/weekly_screenshot.png) | ![Monthly tab](.github/assets/monthly_screenshot.png) |
+
 ---
 
 ## Features

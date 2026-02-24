@@ -48,9 +48,6 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Add Rust target
-        run: rustup target add aarch64-unknown-linux-gnu
-
       - name: Install arm64 toolchain
         run: sudo apt-get update && sudo apt-get install -y gcc-aarch64-linux-gnu
 
@@ -58,6 +55,9 @@ jobs:
         uses: Swatinem/rust-cache@v2
         with:
           key: release-linux-arm64
+
+      - name: Add Rust target
+        run: rustup target add aarch64-unknown-linux-gnu
 
       - name: Build
         run: cargo build --release --target aarch64-unknown-linux-gnu
@@ -84,9 +84,6 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Add Rust target
-        run: rustup target add x86_64-pc-windows-gnu
-
       - name: Install MinGW
         run: |
           sudo apt-get update
@@ -96,6 +93,9 @@ jobs:
         uses: Swatinem/rust-cache@v2
         with:
           key: release-windows
+
+      - name: Add Rust target
+        run: rustup target add x86_64-pc-windows-gnu
 
       - name: Build
         run: cargo build --release --target x86_64-pc-windows-gnu
@@ -129,13 +129,13 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Add Rust target
-        run: rustup target add ${{ matrix.target }}
-
       - name: Cache cargo
         uses: Swatinem/rust-cache@v2
         with:
           key: release-darwin-${{ matrix.target }}
+
+      - name: Add Rust target
+        run: rustup target add ${{ matrix.target }}
 
       - name: Build
         run: cargo build --release --target ${{ matrix.target }}
