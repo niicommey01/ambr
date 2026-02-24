@@ -37,15 +37,15 @@ A **terminal user interface (TUI)** for monitoring network traffic. It records p
 
 ## Installation
 
-Download the artifact for your platform from the [Releases](https://github.com/YOUR_USERNAME/ambr/releases) page, then unpack and run.
+Download the artifact for your platform from the [Releases](https://github.com/niicommey01/ambr/releases) page, then unpack and run.
 
 | Platform | Artifact | Unpack | Run |
 |----------|----------|--------|-----|
-| **Linux x86_64** | `ambr-linux_amd64.tar.gz` | `tar -xzf ambr-linux_amd64.tar.gz && cd ambr-linux_amd64` | `./ambr` |
-| **Linux arm64** (e.g. Raspberry Pi 4) | `ambr-linux_arm64.tar.gz` | `tar -xzf ambr-linux_arm64.tar.gz && cd ambr-linux_arm64` | `./ambr` |
-| **Windows x86_64** | `ambr-windows_amd64.zip` | Unzip, then open a terminal in the folder | `ambr.exe` |
-| **macOS Intel** | `ambr-darwin_amd64.tar.gz` | `tar -xzf ambr-darwin_amd64.tar.gz && cd ambr-darwin_amd64` | `./ambr` |
-| **macOS Apple Silicon** (M1/M2/M3) | `ambr-darwin_arm64.tar.gz` | `tar -xzf ambr-darwin_arm64.tar.gz && cd ambr-darwin_arm64` | `./ambr` |
+| **Linux x86_64** | [`ambr-linux_amd64.tar.gz`](https://github.com/niicommey01/ambr/releases/download/v0.1.0/ambr-linux_amd64.tar.gz) | `tar -xzf ambr-linux_amd64.tar.gz && cd ambr-linux_amd64` | `./ambr` |
+| **Linux arm64** (e.g. Raspberry Pi 4) | [`ambr-linux_arm64.tar.gz`](https://github.com/niicommey01/ambr/releases/download/v0.1.0/ambr-linux_arm64.tar.gz) | `tar -xzf ambr-linux_arm64.tar.gz && cd ambr-linux_arm64` | `./ambr` |
+| **Windows x86_64** | [`ambr-windows_amd64.zip`](https://github.com/niicommey01/ambr/releases/download/v0.1.0/ambr-windows_amd64.zip) | Unzip, then open a terminal in the folder | `ambr.exe` |
+| **macOS Intel** | [`ambr-darwin_amd64.tar.gz`](https://github.com/niicommey01/ambr/releases/download/v0.1.0/ambr-darwin_amd64.tar.gz) | `tar -xzf ambr-darwin_amd64.tar.gz && cd ambr-darwin_amd64` | `./ambr` |
+| **macOS Apple Silicon** (M1/M2/M3) | [`ambr-darwin_arm64.tar.gz`](https://github.com/niicommey01/ambr/releases/download/v0.1.0/ambr-darwin_arm64.tar.gz) | `tar -xzf ambr-darwin_arm64.tar.gz && cd ambr-darwin_arm64` | `./ambr` |
 
 The database is stored in a fixed location so you can run `ambr` from any directory:
 - **Linux:** `~/.local/share/ambr/ambr.db` (or `$XDG_DATA_HOME/ambr/ambr.db` if set)
@@ -117,7 +117,7 @@ The recorder runs in the background and writes new samples every **10 seconds**.
 Clone the repo and build from source. Requires [Rust](https://rustup.rs) 1.70+.
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/ambr.git
+git clone https://github.com/niicommey01/ambr.git
 cd ambr
 cargo build --release
 ```
@@ -126,7 +126,7 @@ Binary: `target/release/ambr` (or `ambr.exe` on Windows). To install into your P
 
 ### Building release artifacts
 
-Scripts in `scripts/` produce the same artifacts offered in [Releases](https://github.com/YOUR_USERNAME/ambr/releases).
+Scripts in `scripts/` produce the same artifacts offered in [Releases](https://github.com/niicommey01/ambr/releases).
 
 **Linux (amd64 + arm64)** – from Linux:
 
