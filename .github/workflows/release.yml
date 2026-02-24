@@ -58,9 +58,6 @@ jobs:
         with:
           key: release-linux-arm64
 
-      - name: Add Rust target for arm64
-        run: $HOME/.cargo/bin/rustup target add aarch64-unknown-linux-gnu --toolchain stable
-
       - name: Build
         run: cargo build --release --target aarch64-unknown-linux-gnu
 
@@ -97,9 +94,6 @@ jobs:
         uses: Swatinem/rust-cache@v2
         with:
           key: release-windows
-
-      - name: Add Rust target for Windows
-        run: $HOME/.cargo/bin/rustup target add x86_64-pc-windows-gnu --toolchain stable
 
       - name: Build
         run: cargo build --release --target x86_64-pc-windows-gnu
@@ -139,9 +133,6 @@ jobs:
         uses: Swatinem/rust-cache@v2
         with:
           key: release-darwin-${{ matrix.target }}
-
-      - name: Add Rust target for macOS
-        run: $HOME/.cargo/bin/rustup target add ${{ matrix.target }} --toolchain stable
 
       - name: Build
         run: cargo build --release --target ${{ matrix.target }}
