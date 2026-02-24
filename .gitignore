@@ -1,0 +1,37 @@
+# Build
+/target
+/dist
+
+# Local env and data
+.env
+.env.local
+.env.*.local
+*.db
+ambr.db
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.settings/
+*.sublime-*
+
+# OS
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Debug / coverage
+*.profraw
+*.profdata
+coverage/
+*.log
+
+# Cargo (uncomment to ignore; binaries often commit Cargo.lock)
+# Cargo.lock
+
+# sqlx offline cache (optional; remove if you use compile-time DB check)
+# .sqlx/

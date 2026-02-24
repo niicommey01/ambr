@@ -1,0 +1,8 @@
+# Cross-compilation linkers (optional).
+# Linux arm64: sudo apt install gcc-aarch64-linux-gnu
+[target.aarch64-unknown-linux-gnu]
+linker = "aarch64-linux-gnu-gcc"
+
+# Windows (GNU) from Linux: sudo apt install mingw-w64
+[target.x86_64-pc-windows-gnu]
+linker = "x86_64-w64-mingw32-gcc"
